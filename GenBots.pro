@@ -18,6 +18,10 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
     agentbot.cpp \
     gen.cpp \
+    gens/genactionbuy.cpp \
+    gens/genactionsell.cpp \
+    gens/genconditionask.cpp \
+    gens/genconditionbid.cpp \
     gens/genconditionsfactory.cpp \
     main.cpp \
     mainwindow.cpp \
@@ -26,6 +30,13 @@ SOURCES += \
 HEADERS += \
     agentbot.h \
     gen.h \
+    gens/genaction.h \
+    gens/genactionbuy.h \
+    gens/genactionsell.h \
+    gens/gencondition.h \
+    gens/genconditionask.h \
+    gens/genconditionbid.h \
+    gens/genconditionnoop.h \
     gens/genconditionsfactory.h \
     mainwindow.h \
     market.h

@@ -1,3 +1,4 @@
+#include <QDebug>
 #include <QPushButton>
 #include <QFileDialog>
 
@@ -32,12 +33,19 @@ void MainWindow::loadHistory()
 
 void MainWindow::historyLoaded()
 {
+    initialGenerateAgents();
+
     while(Market::getMarketInstance().nextTick())
     {
         for(AgentBot* bot : m_agents)
         {
             bot->nextTick();
         }
+    }
+
+    for(AgentBot* bot : m_agents)
+    {
+        qDebug() << "bot's money: " << bot->getEurosEstimation();
     }
 }
 

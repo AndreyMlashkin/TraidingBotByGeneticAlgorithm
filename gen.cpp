@@ -1,4 +1,6 @@
 #include "gen.h"
+#include "gens/genaction.h"
+#include "gens/gencondition.h"
 
 Gen::Gen(GenCondition *condition, GenAction *action) :
     m_condition(condition),
@@ -18,7 +20,7 @@ bool Gen::condition()
     return m_condition->operator()();
 }
 
-void Gen::action()
+void Gen::action(AgentBot &parent)
 {
-    m_action->operator()();
+    m_action->operator()(parent);
 }

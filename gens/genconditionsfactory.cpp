@@ -1,9 +1,15 @@
 #include <QRandomGenerator>
 
 #include "genconditionsfactory.h"
-#include "market.h"
 #include "agentbot.h"
+#include "market.h"
+
 #include "gen.h"
+#include "genconditionask.h"
+#include "genconditionbid.h"
+#include "genconditionnoop.h"
+#include "genactionbuy.h"
+#include "genactionsell.h"
 
 GenFactory::GenFactory()
 {
@@ -18,8 +24,8 @@ Gen *GenFactory::getRandomGen()
 
 GenCondition *GenFactory::getRandomGenCondition()
 {
-    int random = QRandomGenerator::global()->generate();
-    const int variants = 3;
+    quint32 random = QRandomGenerator::global()->generate();
+    const quint32 variants = 3;
     random %= variants;
 
     switch (random)
@@ -34,8 +40,8 @@ GenCondition *GenFactory::getRandomGenCondition()
 
 GenAction *GenFactory::getRandomGenAction()
 {
-    int random = QRandomGenerator::global()->generate();
-    const int variants = 2;
+    quint32 random = QRandomGenerator::global()->generate();
+    const quint32 variants = 2;
     random %= variants;
 
     switch (random)
@@ -47,44 +53,4 @@ GenAction *GenFactory::getRandomGenAction()
     return nullptr;
 }
 
-GenConditionBid::GenConditionBid(double initialStrikeBid)
-    : m_strikeBid(initialStrikeBid)
-{
 
-}
-
-bool GenConditionBid::operator()()
-{
-    return m_strikeBid < Market::getMarketInstance().getBid();
-}
-
-GenConditionAsk::GenConditionAsk(double initialStrikeAsk)
-    : m_strikeAsk(initialStrikeAsk)
-{
-
-}
-
-bool GenConditionAsk::operator()()
-{
-    return m_strikeAsk < Market::getMarketInstance().getAsk();
-}
-
-GenActionBuy::GenActionBuy(double ammount) :
-    m_ammount(ammount)
-{
-}
-
-void GenActionBuy::operator()(AgentBot& parent)
-{
-    parent.buy(m_ammount);
-}
-
-GenActionSell::GenActionSell(double ammount) :
-    m_ammount(ammount)
-{
-}
-
-void GenActionSell::operator()(AgentBot& parent)
-{
-    parent.sell(m_ammount);
-}

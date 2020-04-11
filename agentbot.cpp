@@ -2,16 +2,19 @@
 #include "market.h"
 #include "gen.h"
 
-AgentBot::AgentBot(const QList<Gen *> gens) :
+AgentBot::AgentBot(const QList<Gen *> gens, double euros, double currency) :
+    m_euros(euros),
+    m_currency(currency),
     m_gens(gens)
 {
 
 }
 
-//AgentBot::~AgentBot()
-//{
-//    qDeleteAll(m_gens);
-//}
+AgentBot::~AgentBot()
+{
+    qDeleteAll(m_gens);
+}
+
 
 void AgentBot::buy(double ammount)
 {
@@ -39,6 +42,16 @@ void AgentBot::nextTick()
     for(Gen* gen : m_gens)
     {
         if(gen->condition())
-            gen->action();
+            gen->action(*this);
     }
+}
+
+double AgentBot::getEuros() const
+{
+    return m_euros;
+}
+
+double AgentBot::getEurosEstimation() const
+{
+    return m_euros + Market::getMarketInstance().getAsk() * m_currency;
 }

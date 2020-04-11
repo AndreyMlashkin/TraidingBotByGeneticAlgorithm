@@ -2,6 +2,7 @@
 #define GEN_H
 
 #include "gens/genconditionsfactory.h"
+class AgentBot;
 
 class Gen
 {
@@ -10,7 +11,7 @@ public:
     ~Gen();
 
     bool condition();
-    void action();
+    void action(AgentBot& parent);
 
 private:
     GenCondition* m_condition;
