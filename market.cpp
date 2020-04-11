@@ -46,11 +46,14 @@ bool Market::nextTick()
     QByteArray line = m_marketHistory.readLine();
     QList<QByteArray> words = line.split(',');
     Q_ASSERT(words.size() == 7);
-    QDateTime time = QDateTime::fromString(words[0]);
-    m_time = time.toMSecsSinceEpoch();
+
+    QDate date = QDate::fromString(words[0]);
+    QTime time = QTime::fromString(words[1], "hh:mm");
+    QDateTime datetime(date, time);
+    m_time = datetime.toMSecsSinceEpoch();
 
     bool isOk;
-    double price = QString(words[1]).toDouble(&isOk);
+    double price = QString(words[2]).toDouble(&isOk);
     Q_ASSERT(isOk);
     m_bid = price * (1 + MARGIN);
     m_ask = price * (1 - MARGIN);
