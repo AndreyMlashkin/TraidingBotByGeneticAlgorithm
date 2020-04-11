@@ -1,6 +1,7 @@
 #include <QDebug>
 #include <QPushButton>
 #include <QFileDialog>
+#include <QtAlgorithms>
 
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
@@ -42,6 +43,11 @@ void MainWindow::historyLoaded()
             bot->nextTick();
         }
     }
+
+    std::sort(m_agents.begin(), m_agents.end(), [](const AgentBot* one, const AgentBot* another)
+    {
+        return one->getEurosEstimation() < another->getEurosEstimation();
+    });
 
     for(AgentBot* bot : m_agents)
     {
