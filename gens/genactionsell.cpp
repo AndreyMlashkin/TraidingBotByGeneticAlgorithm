@@ -10,3 +10,8 @@ void GenActionSell::operator()(AgentBot& parent)
 {
     parent.sell(m_ammount);
 }
+
+void GenActionSell::mutate()
+{
+    m_ammount = mutatecoeff(m_ammount);
+}

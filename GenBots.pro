@@ -23,6 +23,7 @@ SOURCES += \
     gens/genconditionask.cpp \
     gens/genconditionbid.cpp \
     gens/genconditionsfactory.cpp \
+    gens/mutatable.cpp \
     main.cpp \
     mainwindow.cpp \
     market.cpp
@@ -38,6 +39,7 @@ HEADERS += \
     gens/genconditionbid.h \
     gens/genconditionnoop.h \
     gens/genconditionsfactory.h \
+    gens/mutatable.h \
     mainwindow.h \
     market.h
 

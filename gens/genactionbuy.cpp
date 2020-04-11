@@ -1,3 +1,5 @@
+#include <QRandomGenerator>
+
 #include "genactionbuy.h"
 #include "agentbot.h"
 
@@ -10,4 +12,9 @@ GenActionBuy::GenActionBuy(double ammount) :
 void GenActionBuy::operator()(AgentBot& parent)
 {
     parent.buy(m_ammount);
+}
+
+void GenActionBuy::mutate()
+{
+    m_ammount = mutatecoeff(m_ammount);
 }

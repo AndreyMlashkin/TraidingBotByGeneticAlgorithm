@@ -7,4 +7,6 @@ class GenConditionNoop : public GenCondition
 public:
     GenConditionNoop() {}
     virtual bool operator() () override { return true; }
+
+    void mutate() override {}
 };

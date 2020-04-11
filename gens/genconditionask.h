@@ -9,6 +9,8 @@ public:
     GenConditionAsk(double initialStrikeAsk = 0);
     virtual bool operator() () override;
 
+    void mutate() override;
+
 private:
     double m_strikeAsk;
 };

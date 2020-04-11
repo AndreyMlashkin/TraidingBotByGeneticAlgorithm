@@ -9,6 +9,8 @@ public:
     GenConditionBid(double initialStrikeBid = 0);
     virtual bool operator() () override;
 
+    void mutate() override;
+
 private:
     double m_strikeBid;
 };
