@@ -1,10 +1,11 @@
 #pragma once
 
 #include <QList>
+#include "gens/mutatable.h"
 
 class Gen;
 
-class AgentBot
+class AgentBot : public Mutatable
 {
 public:
     AgentBot(const QList<Gen*> gens, double euros = 2000, double currency = 0);
@@ -18,11 +19,15 @@ public:
     double getEuros() const;
     double getEurosEstimation() const;
 
+    void mutate() override;
+    QString toString() const override;
+
 private:
     double m_euros;
     double m_currency;
 
     QList<double> m_registers;
     QList<Gen*> m_gens;
+
 };
 

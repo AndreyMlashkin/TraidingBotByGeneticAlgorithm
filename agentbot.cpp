@@ -21,10 +21,11 @@ void AgentBot::buy(double ammount)
     double eurosToSpend = Market::getMarketInstance().getBid() * ammount;
     if(eurosToSpend > m_euros)
     {
-        ammount = m_euros; // Reduce ammount to actual euro ammount
-        m_euros = 0;
+        ammount = m_euros / Market::getMarketInstance().getBid(); // Reduce ammount to how much can we afford
+        eurosToSpend = m_euros;
     }
     m_currency += ammount;
+    m_euros -= eurosToSpend;
 }
 
 void AgentBot::sell(double ammount)
@@ -54,4 +55,22 @@ double AgentBot::getEuros() const
 double AgentBot::getEurosEstimation() const
 {
     return m_euros + Market::getMarketInstance().getAsk() * m_currency;
+}
+
+void AgentBot::mutate()
+{
+    for(Gen* gen : m_gens)
+    {
+        gen->mutate();
+    }
+}
+
+QString AgentBot::toString() const
+{
+    QString answer;
+    for(int i = 0; i < m_gens.size(); ++i)
+    {
+        answer += "Gen" + QString::number(i) + ":" + m_gens[i]->toString() + " ";
+    }
+    return answer;
 }

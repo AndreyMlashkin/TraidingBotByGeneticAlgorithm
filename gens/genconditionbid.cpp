@@ -16,3 +16,8 @@ void GenConditionBid::mutate()
 {
     m_strikeBid = mutatecoeff(m_strikeBid);
 }
+
+QString GenConditionBid::toString() const
+{
+    return QString("bid ") + QString::number(m_strikeBid);
+}

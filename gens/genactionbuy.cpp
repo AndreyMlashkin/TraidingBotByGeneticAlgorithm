@@ -18,3 +18,8 @@ void GenActionBuy::mutate()
 {
     m_ammount = mutatecoeff(m_ammount);
 }
+
+QString GenActionBuy::toString() const
+{
+    return QString("buy ") + QString::number(m_ammount);
+}

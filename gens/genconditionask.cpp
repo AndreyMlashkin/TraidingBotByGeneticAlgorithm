@@ -16,3 +16,8 @@ void GenConditionAsk::mutate()
 {
     m_strikeAsk = mutatecoeff(m_strikeAsk);
 }
+
+QString GenConditionAsk::toString() const
+{
+    return QString("ask ") + QString::number(m_strikeAsk);
+}

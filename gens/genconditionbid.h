@@ -10,6 +10,7 @@ public:
     virtual bool operator() () override;
 
     void mutate() override;
+    QString toString() const override;
 
 private:
     double m_strikeBid;

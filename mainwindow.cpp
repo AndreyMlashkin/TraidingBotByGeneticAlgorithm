@@ -51,7 +51,7 @@ void MainWindow::historyLoaded()
 
     for(AgentBot* bot : m_agents)
     {
-        qDebug() << "bot's money: " << bot->getEurosEstimation();
+        qDebug() << "bot's money: " << bot->getEurosEstimation() << bot->toString();
     }
 }
 

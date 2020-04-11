@@ -11,6 +11,8 @@ public:
 
     void mutate() override;
 
+    QString toString() const override;
+
 private:
     double m_ammount;
 };

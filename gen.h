@@ -2,9 +2,11 @@
 #define GEN_H
 
 #include "gens/genconditionsfactory.h"
+#include "gens/mutatable.h"
+
 class AgentBot;
 
-class Gen
+class Gen : public Mutatable
 {
 public:
     Gen(GenCondition* condition, GenAction* action);
@@ -12,6 +14,9 @@ public:
 
     bool condition();
     void action(AgentBot& parent);
+
+    void mutate() override;
+    QString toString() const override;
 
 private:
     GenCondition* m_condition;

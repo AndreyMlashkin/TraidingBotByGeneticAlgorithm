@@ -1,3 +1,5 @@
+#include <QRandomGenerator>
+
 #include "gen.h"
 #include "gens/genaction.h"
 #include "gens/gencondition.h"
@@ -23,4 +25,24 @@ bool Gen::condition()
 void Gen::action(AgentBot &parent)
 {
     m_action->operator()(parent);
+}
+
+void Gen::mutate()
+{
+    quint32 randomOperation = QRandomGenerator::global()->generate();
+    const quint32 variants = 4;
+    randomOperation %= variants;
+
+    if(randomOperation == 1 || randomOperation == 3)
+        m_condition->mutate();
+    if(randomOperation == 2 || randomOperation == 3)
+        m_action->mutate();
+}
+
+QString Gen::toString() const
+{
+    return QString("Condition:[")
+            + m_condition->toString() +
+            "] Action:["
+            + m_action->toString() + "]";
 }

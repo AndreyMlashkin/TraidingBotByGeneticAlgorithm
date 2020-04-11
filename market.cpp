@@ -57,6 +57,7 @@ bool Market::nextTick()
     Q_ASSERT(isOk);
     m_bid = price * (1 + MARGIN);
     m_ask = price * (1 - MARGIN);
+    qDebug() << "bid = " << m_bid << " ask = " << m_ask;
     return true;
 }
 

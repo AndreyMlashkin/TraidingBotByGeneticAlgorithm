@@ -10,6 +10,8 @@ public:
     void operator() (AgentBot& parent) override;
     void mutate() override;
 
+    QString toString() const override;
+
 private:
     double m_ammount;
 };

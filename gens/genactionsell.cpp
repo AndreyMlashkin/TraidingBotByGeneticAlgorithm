@@ -15,3 +15,9 @@ void GenActionSell::mutate()
 {
     m_ammount = mutatecoeff(m_ammount);
 }
+
+QString GenActionSell::toString() const
+{
+    return QString("sell ") + QString::number(m_ammount);
+}
+
