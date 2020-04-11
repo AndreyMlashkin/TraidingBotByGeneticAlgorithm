@@ -17,6 +17,13 @@ Gen::~Gen()
     delete m_action;
 }
 
+Gen &Gen::operator=(const Gen &other)
+{
+    m_action = other.m_action;
+    m_condition = other.m_condition;
+    return *this;
+}
+
 bool Gen::condition()
 {
     return m_condition->operator()();
@@ -45,4 +52,11 @@ QString Gen::toString() const
             + m_condition->toString() +
             "] Action:["
             + m_action->toString() + "]";
+}
+
+Mutatable *Gen::copy() const
+{
+    return new Gen(
+                dynamic_cast<GenCondition*>(m_condition->copy()),
+                dynamic_cast<GenAction*>   (m_action->copy()));
 }

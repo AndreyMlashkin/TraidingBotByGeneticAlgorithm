@@ -12,11 +12,14 @@ public:
     Gen(GenCondition* condition, GenAction* action);
     ~Gen();
 
+    Gen& operator=(const Gen& other);
+
     bool condition();
     void action(AgentBot& parent);
 
     void mutate() override;
     QString toString() const override;
+    Mutatable* copy() const override;
 
 private:
     GenCondition* m_condition;

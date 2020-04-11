@@ -8,9 +8,10 @@ class GenActionBuy : public GenAction
 public:
     GenActionBuy(double ammount = 1);
     void operator() (AgentBot& parent) override;
-    void mutate() override;
 
+    void mutate() override;
     QString toString() const override;
+    Mutatable* copy() const override;
 
 private:
     double m_ammount;

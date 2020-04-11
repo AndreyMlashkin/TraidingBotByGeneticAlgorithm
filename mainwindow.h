@@ -23,10 +23,11 @@ private:
     void historyLoaded();
     void initialGenerateAgents();
 
+    void trainGenerationOnLoadedHistory();
+    QList<AgentBot*> produceNewGeneration() const;
+
 private:
     Ui::MainWindow *ui;
     QList<AgentBot*> m_agents;
-
-
 };
 #endif // MAINWINDOW_H

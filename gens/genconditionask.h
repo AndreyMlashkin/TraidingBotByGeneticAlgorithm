@@ -11,6 +11,7 @@ public:
 
     void mutate() override;
     QString toString() const override;
+    Mutatable* copy() const override;
 
 private:
     double m_strikeAsk;

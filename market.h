@@ -18,6 +18,7 @@ public:
     qint64 currentTime() const;
 
     void loadHistory(const QString& historyFilePath);
+    void reset();
 
     bool nextTick();
 

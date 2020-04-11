@@ -25,3 +25,11 @@ double Mutatable::mutatecoeff(double original)
     }
     return original;
 }
+
+double Mutatable::mutatecoeffNoNegative(double original)
+{
+    double result = mutatecoeff(original);
+    if(result < 0)
+        result *= -1;
+    return result;
+}

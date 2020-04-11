@@ -10,4 +10,5 @@ public:
     QString toString() const override { return "no condition"; }
 
     void mutate() override {}
+    Mutatable* copy() const override { return new GenConditionNoop(); }
 };

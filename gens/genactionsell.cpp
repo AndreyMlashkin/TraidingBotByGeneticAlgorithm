@@ -13,11 +13,16 @@ void GenActionSell::operator()(AgentBot& parent)
 
 void GenActionSell::mutate()
 {
-    m_ammount = mutatecoeff(m_ammount);
+    m_ammount = mutatecoeffNoNegative(m_ammount);
 }
 
 QString GenActionSell::toString() const
 {
     return QString("sell ") + QString::number(m_ammount);
+}
+
+Mutatable *GenActionSell::copy() const
+{
+    return new GenActionSell(m_ammount);
 }
 

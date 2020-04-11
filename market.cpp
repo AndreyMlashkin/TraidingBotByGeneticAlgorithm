@@ -27,9 +27,17 @@ qint64 Market::currentTime() const
 
 void Market::loadHistory(const QString &historyFilePath)
 {
+    if(m_marketHistory.isOpen())
+        m_marketHistory.close();
+
     m_marketHistory.setFileName(historyFilePath);
     if (!m_marketHistory.open(QIODevice::ReadOnly | QIODevice::Text))
         return;
+}
+
+void Market::reset()
+{
+    loadHistory(m_marketHistory.fileName());
 }
 
 bool Market::nextTick()
@@ -57,7 +65,7 @@ bool Market::nextTick()
     Q_ASSERT(isOk);
     m_bid = price * (1 + MARGIN);
     m_ask = price * (1 - MARGIN);
-    qDebug() << "bid = " << m_bid << " ask = " << m_ask;
+    //qDebug() << "bid = " << m_bid << " ask = " << m_ask;
     return true;
 }
 

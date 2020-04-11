@@ -74,3 +74,12 @@ QString AgentBot::toString() const
     }
     return answer;
 }
+
+Mutatable *AgentBot::copy() const
+{
+    QList<Gen*> gensCopy;
+    for(Gen* gen : m_gens)
+        gensCopy << dynamic_cast<Gen*>(gen->copy());
+
+    return new AgentBot(gensCopy, m_euros, m_currency);
+}

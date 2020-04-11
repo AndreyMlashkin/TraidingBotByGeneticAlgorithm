@@ -16,10 +16,15 @@ void GenActionBuy::operator()(AgentBot& parent)
 
 void GenActionBuy::mutate()
 {
-    m_ammount = mutatecoeff(m_ammount);
+    m_ammount = mutatecoeffNoNegative(m_ammount);
 }
 
 QString GenActionBuy::toString() const
 {
     return QString("buy ") + QString::number(m_ammount);
+}
+
+Mutatable *GenActionBuy::copy() const
+{
+    return new GenActionBuy(m_ammount);
 }

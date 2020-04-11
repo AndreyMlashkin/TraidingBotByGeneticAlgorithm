@@ -14,10 +14,15 @@ bool GenConditionAsk::operator()()
 
 void GenConditionAsk::mutate()
 {
-    m_strikeAsk = mutatecoeff(m_strikeAsk);
+    m_strikeAsk = mutatecoeffNoNegative(m_strikeAsk);
 }
 
 QString GenConditionAsk::toString() const
 {
     return QString("ask ") + QString::number(m_strikeAsk);
+}
+
+Mutatable *GenConditionAsk::copy() const
+{
+    return new GenConditionAsk(m_strikeAsk);
 }
