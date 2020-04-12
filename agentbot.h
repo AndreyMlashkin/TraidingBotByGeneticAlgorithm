@@ -23,6 +23,9 @@ public:
     QString toString() const override;
     Mutatable* copy() const override;
 
+    void setEuros(double ammount);
+    void setCurrency(double ammount);
+
 private:
     double m_euros;
     double m_currency;

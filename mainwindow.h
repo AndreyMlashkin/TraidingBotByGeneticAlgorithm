@@ -25,6 +25,8 @@ private:
 
     void trainGenerationOnLoadedHistory();
     QList<AgentBot*> produceNewGeneration() const;
+    static void resetMoney(QList<AgentBot*>& bots);
+
 
 private:
     Ui::MainWindow *ui;

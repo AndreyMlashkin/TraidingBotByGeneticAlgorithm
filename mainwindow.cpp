@@ -29,7 +29,8 @@ MainWindow::~MainWindow()
 
 void MainWindow::loadHistory()
 {
-    QString filename = QFileDialog::getOpenFileName(nullptr, "Market History Data");
+    QString filename = "C:/Users/malas/Documents/build-GenBots-Desktop_Qt_5_13_1_MinGW_64_bit-Debug/DAT_MT_EURUSD_M1_202004.csv";
+            //QFileDialog::getOpenFileName(nullptr, "Market History Data");
     Market::getMarketInstance().loadHistory(filename);
 
     historyLoaded();
@@ -99,6 +100,16 @@ QList<AgentBot *> MainWindow::produceNewGeneration() const
         newGeneration << newAgent;
     }
     Q_ASSERT(newGeneration.size() == POPULATION_SIZE);
+    resetMoney(newGeneration);
     return newGeneration;
+}
+
+void MainWindow::resetMoney(QList<AgentBot *> &bots)
+{
+    for(AgentBot* bot : bots)
+    {
+        bot->setEuros(2000);
+        bot->setCurrency(0);
+    }
 }
 

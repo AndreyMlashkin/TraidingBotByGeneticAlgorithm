@@ -83,3 +83,13 @@ Mutatable *AgentBot::copy() const
 
     return new AgentBot(gensCopy, m_euros, m_currency);
 }
+
+void AgentBot::setEuros(double ammount)
+{
+    m_euros = ammount;
+}
+
+void AgentBot::setCurrency(double ammount)
+{
+    m_currency = ammount;
+}
