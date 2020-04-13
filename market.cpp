@@ -54,10 +54,6 @@ void Market::loadHistory(const QString &historyFilePath)
         double bid = QString(words[3]).toDouble(&isOk);
 
         m_history.push_back(CurrentTickInfo(currentTime, ask, bid));
-
-        static int count = 0;
-        qDebug() << "bid = " << bid << " ask = " << ask << " iteration = " << count++;
-
     }
     printHistory();
     m_currentTick = 0;

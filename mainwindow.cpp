@@ -2,6 +2,7 @@
 #include <QPushButton>
 #include <QFileDialog>
 #include <QtAlgorithms>
+#include <QElapsedTimer>
 
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
@@ -40,6 +41,9 @@ void MainWindow::historyLoaded()
 {
     initialGenerateAgents();
 
+    QElapsedTimer timer;
+    timer.start();
+
     for(int i = 0; i < GENERATIONS_COUNT; ++i)
     {
         Market::getMarketInstance().reset();
@@ -59,6 +63,7 @@ void MainWindow::historyLoaded()
         qDeleteAll(m_agents);
         m_agents = newGeneration;
     }
+    qDebug() << "processing of " << GENERATIONS_COUNT << " generations took " << timer.elapsed() << "milliseconds";
 }
 
 void MainWindow::initialGenerateAgents()
