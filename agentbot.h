@@ -26,6 +26,8 @@ public:
     void setEuros(double ammount);
     void setCurrency(double ammount);
 
+    int gensCount() const;
+
 private:
     double m_euros;
     double m_currency;

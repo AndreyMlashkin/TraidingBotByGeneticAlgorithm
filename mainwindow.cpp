@@ -54,7 +54,12 @@ void MainWindow::historyLoaded()
 
         std::sort(m_agents.begin(), m_agents.end(), [](const AgentBot* one, const AgentBot* another)
         {
-            return one->getEurosEstimation() > another->getEurosEstimation();
+            if(one->getEurosEstimation() > another->getEurosEstimation())
+                return true;
+            if(one->getEurosEstimation() < another->getEurosEstimation())
+                return false;
+
+            return one->gensCount() < another->gensCount();
         });
 
         if(strikeOnce && m_agents.first()->getEurosEstimation() > 2000)

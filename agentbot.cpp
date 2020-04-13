@@ -94,3 +94,8 @@ void AgentBot::setCurrency(double ammount)
 {
     m_currency = ammount;
 }
+
+int AgentBot::gensCount() const
+{
+    return m_gens.count();
+}
