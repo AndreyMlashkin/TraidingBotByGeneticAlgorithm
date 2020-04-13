@@ -13,11 +13,9 @@ class GenFactory
 public:
     GenFactory();
 
-    Gen* getRandomGen();
-
-private:
-    GenCondition* getRandomGenCondition();
-    GenAction*    getRandomGenAction();
+    static Gen* getRandomGen();
+    static GenCondition* getRandomGenCondition();
+    static GenAction*    getRandomGenAction();
 };
 
 //---------------------

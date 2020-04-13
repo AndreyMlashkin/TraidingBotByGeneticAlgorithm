@@ -36,6 +36,7 @@ void AgentBot::sell(double ammount)
         m_currency = 0;
     }
     m_euros += Market::getMarketInstance().getAsk() * ammount;
+    m_currency -= ammount;
 }
 
 void AgentBot::nextTick()

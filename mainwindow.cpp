@@ -89,6 +89,8 @@ QList<AgentBot *> MainWindow::produceNewGeneration() const
     // Take 10% best
     for(int i = 0; i < POPULATION_SIZE * 0.1; ++i)
     {
+        if(m_agents[i]->getEurosEstimation() == 2000)
+            m_agents[i]->mutate();
         newGeneration << dynamic_cast<AgentBot*>(m_agents[i]->copy());
     }
 

@@ -61,10 +61,8 @@ bool Market::nextTick()
     m_time = datetime.toMSecsSinceEpoch();
 
     bool isOk;
-    double price = QString(words[2]).toDouble(&isOk);
-    Q_ASSERT(isOk);
-    m_bid = price * (1 + MARGIN);
-    m_ask = price * (1 - MARGIN);
+    m_ask = QString(words[2]).toDouble(&isOk);
+    m_bid = QString(words[3]).toDouble(&isOk);
     //qDebug() << "bid = " << m_bid << " ask = " << m_ask;
     return true;
 }

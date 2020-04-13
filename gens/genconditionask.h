@@ -6,7 +6,7 @@
 class GenConditionAsk : public GenCondition
 {
 public:
-    GenConditionAsk(double initialStrikeAsk = 0);
+    GenConditionAsk(double initialStrikeAsk = 1);
     virtual bool operator() () override;
 
     void mutate() override;

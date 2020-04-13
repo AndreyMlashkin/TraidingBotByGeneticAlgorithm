@@ -3,6 +3,7 @@
 #include "gen.h"
 #include "gens/genaction.h"
 #include "gens/gencondition.h"
+#include "gens/genconditionsfactory.h"
 
 Gen::Gen(GenCondition *condition, GenAction *action) :
     m_condition(condition),
@@ -37,13 +38,25 @@ void Gen::action(AgentBot &parent)
 void Gen::mutate()
 {
     quint32 randomOperation = QRandomGenerator::global()->generate();
-    const quint32 variants = 4;
+    const quint32 variants = 5;
     randomOperation %= variants;
 
-    if(randomOperation == 1 || randomOperation == 3)
+    if(randomOperation == 0)
+    {
+        delete m_condition;
+        m_condition = GenFactory::getRandomGenCondition();
+    }
+    if(randomOperation == 1)
+    {
+        delete m_action;
+        m_action = GenFactory::getRandomGenAction();
+    }
+
+    if(randomOperation == 2 || randomOperation == 4)
         m_condition->mutate();
-    if(randomOperation == 2 || randomOperation == 3)
+    if(randomOperation == 3 || randomOperation == 4)
         m_action->mutate();
+
 }
 
 QString Gen::toString() const
