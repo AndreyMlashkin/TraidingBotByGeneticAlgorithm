@@ -15,6 +15,11 @@ bool GenConditionBid::operator()()
 void GenConditionBid::mutate()
 {
     m_strikeBid = mutatecoeffNoNegative(m_strikeBid);
+
+    if(m_strikeBid > Market::getMarketInstance().getMaxBid())
+        m_strikeBid = Market::getMarketInstance().getMaxBid();
+    if(m_strikeBid < Market::getMarketInstance().getMinBid())
+        m_strikeBid = Market::getMarketInstance().getMinBid();
 }
 
 QString GenConditionBid::toString() const

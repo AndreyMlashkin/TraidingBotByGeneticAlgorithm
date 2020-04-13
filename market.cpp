@@ -23,6 +23,26 @@ qint64 Market::currentTime() const
     return m_history[m_currentTick].m_time;
 }
 
+double Market::getMaxBid() const
+{
+    return m_cachedMaxBid;
+}
+
+double Market::getMinBid() const
+{
+    return m_cachedMinBid;
+}
+
+double Market::getMaxAsk() const
+{
+    return m_cachedMaxAsk;
+}
+
+double Market::getMinAsk() const
+{
+    return m_cachedMinAsk;
+}
+
 void Market::loadHistory(const QString &historyFilePath)
 {
     m_history.clear();
@@ -55,8 +75,10 @@ void Market::loadHistory(const QString &historyFilePath)
 
         m_history.push_back(CurrentTickInfo(currentTime, ask, bid));
     }
-    printHistory();
     m_currentTick = 0;
+
+    updateLimits();
+    printHistory();
 }
 
 void Market::reset()
@@ -86,6 +108,11 @@ void Market::printHistory() const
                     .arg(i)
                     .arg(info.toString());
     }
+
+    qDebug() << "m_cachedMaxBid=" << getMaxBid();
+    qDebug() << "m_cachedMinBid=" << getMinBid();
+    qDebug() << "m_cachedMaxAsk=" << getMaxAsk();
+    qDebug() << "m_cachedMinAsk=" << getMinAsk();
 }
 
 Market::Market() :
@@ -93,6 +120,37 @@ Market::Market() :
 
 {
 
+}
+
+void Market::updateLimits()
+{
+    m_cachedMaxBid = std::numeric_limits<double>::min();
+    for(const CurrentTickInfo& info : m_history)
+    {
+        if(m_cachedMaxBid < info.m_bid)
+            m_cachedMaxBid = info.m_bid;
+    }
+
+    m_cachedMinBid = std::numeric_limits<double>::max();
+    for(const CurrentTickInfo& info : m_history)
+    {
+        if(m_cachedMinBid > info.m_bid)
+            m_cachedMinBid = info.m_bid;
+    }
+
+    m_cachedMaxAsk = std::numeric_limits<double>::min();
+    for(const CurrentTickInfo& info : m_history)
+    {
+        if(m_cachedMaxAsk < info.m_ask)
+            m_cachedMaxAsk = info.m_ask;
+    }
+
+    m_cachedMinAsk = std::numeric_limits<double>::max();
+    for(const CurrentTickInfo& info : m_history)
+    {
+        if(m_cachedMinAsk > info.m_ask)
+            m_cachedMinAsk = info.m_ask;
+    }
 }
 
 QString Market::CurrentTickInfo::toString() const

@@ -5,6 +5,8 @@
 #include <QFile>
 #include <QDateTime>
 
+static const double INVALID_DOUBLE = std::numeric_limits<double>::quiet_NaN();
+
 class Market
 {
 public:
@@ -18,6 +20,12 @@ public:
     double getAsk() const;
     qint64 currentTime() const;
 
+    double getMaxBid() const;
+    double getMinBid() const;
+
+    double getMaxAsk() const;
+    double getMinAsk() const;
+
     void loadHistory(const QString& historyFilePath);
     void reset();
 
@@ -27,6 +35,7 @@ public:
 
 private:
     Market();
+    void updateLimits();
 
     QFile m_marketHistoryFile;
     struct CurrentTickInfo
@@ -46,6 +55,12 @@ private:
 
     QVector<CurrentTickInfo> m_history;
     int m_currentTick = 0;
+
+    double m_cachedMaxBid = INVALID_DOUBLE;
+    double m_cachedMinBid = INVALID_DOUBLE;
+
+    double m_cachedMaxAsk = INVALID_DOUBLE;
+    double m_cachedMinAsk = INVALID_DOUBLE;
 
 };
 

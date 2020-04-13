@@ -12,7 +12,7 @@
 #include "gens/genconditionsfactory.h"
 
 const int POPULATION_SIZE = 100;
-const int GENERATIONS_COUNT = 100;
+const int GENERATIONS_COUNT = 1000;
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
