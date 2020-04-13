@@ -63,13 +63,9 @@ void MainWindow::historyLoaded()
             incomeGeneration = i;
         }
 
-
         if(i % 10 == 0)
         {
-            for(AgentBot* bot : m_agents)
-            {
-                qDebug() << "bot's money: " << bot->getEurosEstimation() << bot->toString();
-            }
+            printBotsStatistic();
         }
         QList<AgentBot *> newGeneration = produceNewGeneration();
         qDeleteAll(m_agents);
@@ -154,6 +150,14 @@ void MainWindow::resetMoney(QList<AgentBot *> &bots)
     {
         bot->setEuros(2000);
         bot->setCurrency(0);
+    }
+}
+
+void MainWindow::printBotsStatistic() const
+{
+    for(AgentBot* bot : m_agents)
+    {
+        qDebug() << "bot's money: " << bot->getEurosEstimation() << bot->toString();
     }
 }
 
