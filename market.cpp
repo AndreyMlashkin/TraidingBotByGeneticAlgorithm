@@ -3,71 +3,107 @@
 
 #include "market.h"
 
-const double MARGIN = 0.05;
-
 Market::~Market()
 {
-    m_marketHistory.close();
+    m_marketHistoryFile.close();
 }
 
 double Market::getBid() const
 {
-    return m_bid;
+    return m_history[m_currentTick].m_bid;
 }
 
 double Market::getAsk() const
 {
-    return m_ask;
+    return m_history[m_currentTick].m_ask;
 }
 
 qint64 Market::currentTime() const
 {
-    return m_time;
+    return m_history[m_currentTick].m_time;
 }
 
 void Market::loadHistory(const QString &historyFilePath)
 {
-    if(m_marketHistory.isOpen())
-        m_marketHistory.close();
+    m_history.clear();
+    m_history = {};
 
-    m_marketHistory.setFileName(historyFilePath);
-    if (!m_marketHistory.open(QIODevice::ReadOnly | QIODevice::Text))
+    if(m_marketHistoryFile.isOpen())
+        m_marketHistoryFile.close();
+
+    m_marketHistoryFile.setFileName(historyFilePath);
+    if (!m_marketHistoryFile.open(QIODevice::ReadOnly | QIODevice::Text))
         return;
+
+    while(!m_marketHistoryFile.atEnd())
+    {
+        //Row Fields:
+        // DateTime Stamp;Bar OPEN Bid Quote;Bar HIGH Bid Quote;Bar LOW Bid Quote;Bar CLOSE Bid Quote;Volume
+
+        QByteArray line = m_marketHistoryFile.readLine();
+        QList<QByteArray> words = line.split(',');
+        Q_ASSERT(words.size() == 7);
+
+        QDate date = QDate::fromString(words[0]);
+        QTime time = QTime::fromString(words[1], "hh:mm");
+        QDateTime datetime(date, time);
+        qint64 currentTime = datetime.toMSecsSinceEpoch();
+
+        bool isOk;
+        double ask = QString(words[2]).toDouble(&isOk);
+        double bid = QString(words[3]).toDouble(&isOk);
+
+        m_history.push_back(CurrentTickInfo(currentTime, ask, bid));
+
+        static int count = 0;
+        qDebug() << "bid = " << bid << " ask = " << ask << " iteration = " << count++;
+
+    }
+    printHistory();
+    m_currentTick = 0;
 }
 
 void Market::reset()
 {
-    loadHistory(m_marketHistory.fileName());
+//    loadHistory(m_marketHistory.fileName());
+    m_currentTick = 0;
 }
 
 bool Market::nextTick()
 {
-    if(m_marketHistory.atEnd())
-    {
-        qDebug() << Q_FUNC_INFO << " file is at the end";
+    ++m_currentTick;
+    if(m_currentTick >= m_history.size() - 1)
         return false;
-    }
 
-    //Row Fields:
-    // DateTime Stamp;Bar OPEN Bid Quote;Bar HIGH Bid Quote;Bar LOW Bid Quote;Bar CLOSE Bid Quote;Volume
+    return  true;
 
-    QByteArray line = m_marketHistory.readLine();
-    QList<QByteArray> words = line.split(',');
-    Q_ASSERT(words.size() == 7);
 
-    QDate date = QDate::fromString(words[0]);
-    QTime time = QTime::fromString(words[1], "hh:mm");
-    QDateTime datetime(date, time);
-    m_time = datetime.toMSecsSinceEpoch();
-
-    bool isOk;
-    m_ask = QString(words[2]).toDouble(&isOk);
-    m_bid = QString(words[3]).toDouble(&isOk);
-    //qDebug() << "bid = " << m_bid << " ask = " << m_ask;
-    return true;
 }
 
-Market::Market()
+void Market::printHistory() const
 {
+    qDebug() << "history size = " << m_history.size();
+    for(int i = 0; i < m_history.size(); ++i)
+    {
+        const CurrentTickInfo& info = m_history[i];
+        qDebug() << QString("iteration %1; %2")
+                    .arg(i)
+                    .arg(info.toString());
+    }
+}
+
+Market::Market() :
+    m_currentTick(0)
+
+{
+
+}
+
+QString Market::CurrentTickInfo::toString() const
+{
+    return QString("Time = %1; Ask = %2; Bid = %3;")
+            .arg(m_time)
+            .arg(m_ask)
+            .arg(m_bid);
 
 }

@@ -3,6 +3,7 @@
 
 #include <QString>
 #include <QFile>
+#include <QDateTime>
 
 class Market
 {
@@ -22,13 +23,29 @@ public:
 
     bool nextTick();
 
+    void printHistory() const;
+
 private:
     Market();
 
-    QFile m_marketHistory;
-    double m_bid;
-    double m_ask;
-    qint64 m_time;
+    QFile m_marketHistoryFile;
+    struct CurrentTickInfo
+    {
+        CurrentTickInfo(qint64 time, double ask, double bid) :
+            m_time(time),
+            m_ask(ask),
+            m_bid(bid)
+        {}
+
+        QString toString() const;
+
+        qint64 m_time;
+        double m_ask;
+        double m_bid;
+    };
+
+    QVector<CurrentTickInfo> m_history;
+    int m_currentTick = 0;
 
 };
 
