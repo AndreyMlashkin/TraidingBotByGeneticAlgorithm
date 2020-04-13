@@ -90,7 +90,8 @@ void MainWindow::trainGenerationOnLoadedHistory()
 
 QList<AgentBot *> MainWindow::produceNewGeneration() const
 {
-    QList<AgentBot*> newGeneration;
+    QList<AgentBot*> newGeneration;    
+
     // Take 10% best
     for(int i = 0; i < POPULATION_SIZE * 0.1; ++i)
     {

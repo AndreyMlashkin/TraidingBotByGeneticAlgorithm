@@ -2,11 +2,12 @@
 #define GENCONDITIONASK_H
 
 #include "gencondition.h"
+#include "market.h"
 
 class GenConditionAsk : public GenCondition
 {
 public:
-    GenConditionAsk(double initialStrikeAsk = 1);
+    GenConditionAsk(double initialStrikeAsk);
     virtual bool operator() () override;
 
     void mutate() override;

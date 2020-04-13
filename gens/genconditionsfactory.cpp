@@ -31,8 +31,12 @@ GenCondition *GenFactory::getRandomGenCondition()
     switch (random)
     {
     case 0: return new GenConditionNoop();
-    case 1: return new GenConditionAsk();
-    case 2: return new GenConditionBid();
+
+    case 1: return new GenConditionAsk((Market::getMarketInstance().getMaxAsk() +
+                                        Market::getMarketInstance().getMinAsk()) / 2);
+
+    case 2: return new GenConditionBid((Market::getMarketInstance().getMaxBid() +
+                                        Market::getMarketInstance().getMinBid()) / 2);
     }
     Q_ASSERT(false);
     return nullptr;

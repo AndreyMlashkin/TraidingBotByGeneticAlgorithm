@@ -14,6 +14,8 @@ void GenActionSell::operator()(AgentBot& parent)
 void GenActionSell::mutate()
 {
     m_ammount = mutatecoeffNoNegative(m_ammount);
+    if(m_ammount < 1)
+        m_ammount = 1;
 }
 
 QString GenActionSell::toString() const
