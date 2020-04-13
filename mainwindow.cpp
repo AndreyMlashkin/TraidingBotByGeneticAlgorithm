@@ -44,6 +44,8 @@ void MainWindow::historyLoaded()
     QElapsedTimer timer;
     timer.start();
 
+    bool strikeOnce = true;
+    int incomeGeneration = 0;
     for(int i = 0; i < GENERATIONS_COUNT; ++i)
     {
         Market::getMarketInstance().reset();
@@ -54,16 +56,28 @@ void MainWindow::historyLoaded()
         {
             return one->getEurosEstimation() > another->getEurosEstimation();
         });
-        for(AgentBot* bot : m_agents)
+
+        if(strikeOnce && m_agents.first()->getEurosEstimation() > 2000)
         {
-            qDebug() << "bot's money: " << bot->getEurosEstimation() << bot->toString();
+            strikeOnce = false;
+            incomeGeneration = i;
         }
 
+
+        if(i % 10 == 0)
+        {
+            for(AgentBot* bot : m_agents)
+            {
+                qDebug() << "bot's money: " << bot->getEurosEstimation() << bot->toString();
+            }
+        }
         QList<AgentBot *> newGeneration = produceNewGeneration();
         qDeleteAll(m_agents);
         m_agents = newGeneration;
     }
-    qDebug() << "processing of " << GENERATIONS_COUNT << " generations took " << timer.elapsed() << "milliseconds";
+    qDebug() << "processing of " << GENERATIONS_COUNT << " generations took " << timer.elapsed() / 1000 << "seconds";
+    qDebug() << "income from generation " << incomeGeneration;
+
 }
 
 void MainWindow::initialGenerateAgents()
@@ -90,23 +104,45 @@ void MainWindow::trainGenerationOnLoadedHistory()
 
 QList<AgentBot *> MainWindow::produceNewGeneration() const
 {
-    QList<AgentBot*> newGeneration;    
+    QList<AgentBot*> newGeneration;
+    QList<AgentBot*> selectedOldGeneration = m_agents;
 
-    // Take 10% best
-    for(int i = 0; i < POPULATION_SIZE * 0.1; ++i)
+    // Elliminate NOOP agents and agents with too low performance
+    for(int i = 0; i < selectedOldGeneration.size(); ++i)
     {
-        if(m_agents[i]->getEurosEstimation() == 2000)
-            m_agents[i]->mutate();
-        newGeneration << dynamic_cast<AgentBot*>(m_agents[i]->copy());
+        if(selectedOldGeneration[i]->getEurosEstimation() == 2000 ||
+           selectedOldGeneration[i]->getEurosEstimation() < 1)
+        {
+            selectedOldGeneration.removeAt(i);
+            --i;
+        }
+    }
+
+    // Clone 10% best
+    for(int i = 0; i < selectedOldGeneration.size() * 0.1; ++i)
+    {
+        newGeneration << dynamic_cast<AgentBot*>(selectedOldGeneration[i]->copy());
     }
 
     // mutate 90% of rest
-    for(int i = 0; i < POPULATION_SIZE * 0.9; ++i)
+    for(int i = 0; i < selectedOldGeneration.size() * 0.9; ++i)
     {
-        AgentBot* newAgent = dynamic_cast<AgentBot*>(m_agents[i]->copy());
+        AgentBot* newAgent = dynamic_cast<AgentBot*>(selectedOldGeneration[i]->copy());
         newAgent->mutate();
         newGeneration << newAgent;
     }
+
+    // Fill till 100 is reached
+    int i = 0;
+    while(newGeneration.size() != POPULATION_SIZE)
+    {
+        AgentBot* newAgent = dynamic_cast<AgentBot*>(selectedOldGeneration[i]->copy());
+        newAgent->mutate();
+        newGeneration << newAgent;
+        ++i;
+        i %= selectedOldGeneration.size();
+    }
+
     Q_ASSERT(newGeneration.size() == POPULATION_SIZE);
     resetMoney(newGeneration);
     return newGeneration;
