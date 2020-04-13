@@ -1,6 +1,9 @@
+#include <QRandomGenerator>
+
 #include "agentbot.h"
 #include "market.h"
 #include "gen.h"
+#include "gens/genconditionsfactory.h"
 
 AgentBot::AgentBot(const QList<Gen *> gens, double euros, double currency) :
     m_euros(euros),
@@ -60,9 +63,20 @@ double AgentBot::getEurosEstimation() const
 
 void AgentBot::mutate()
 {
-    for(Gen* gen : m_gens)
+//    int addGenPossibility = m_gens.count() < 6? 1 : 0;
+
+    int randomOperation = QRandomGenerator::global()->generate() % (m_gens.count() + 1);
+    if(randomOperation == m_gens.count())
     {
-        gen->mutate();
+        randomOperation = QRandomGenerator::global()->generate() % (m_gens.count() + 1);
+        if(gensCount() > 2)
+           m_gens.removeAt(randomOperation);
+        else
+            m_gens << GenFactory::getRandomGen();
+    }
+    else
+    {
+        m_gens[randomOperation]->mutate();
     }
 }
 

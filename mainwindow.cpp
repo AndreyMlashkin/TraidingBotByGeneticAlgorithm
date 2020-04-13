@@ -12,7 +12,7 @@
 #include "gens/genconditionsfactory.h"
 
 const int POPULATION_SIZE = 100;
-const int GENERATIONS_COUNT = 1000;
+const int GENERATIONS_COUNT = 50000;
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -76,6 +76,7 @@ void MainWindow::historyLoaded()
         qDeleteAll(m_agents);
         m_agents = newGeneration;
     }
+    //printBotsStatistic();
     qDebug() << "processing of " << GENERATIONS_COUNT << " generations took " << timer.elapsed() / 1000 << "seconds";
     qDebug() << "income from generation " << incomeGeneration;
 
