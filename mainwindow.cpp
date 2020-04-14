@@ -23,8 +23,10 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    connect(ui->m_loadHistory, &QPushButton::clicked, this, &MainWindow::loadHistory);
-    connect(ui->m_loadAgents,  &QPushButton::clicked, this, &MainWindow::loadAgents);
+    connect(ui->m_loadHistory,         &QPushButton::clicked, this, &MainWindow::loadHistory);
+    connect(ui->m_loadSpecificHistory, &QPushButton::clicked, this, &MainWindow::loadSpecificHistory);
+    connect(ui->m_loadAgents,          &QPushButton::clicked, this, &MainWindow::loadAgents);
+
 
     initialGenerateAgents();
 }
@@ -40,7 +42,13 @@ void MainWindow::loadHistory()
     QString filename = "C:/Users/malas/Documents/build-GenBots-Desktop_Qt_5_13_1_MinGW_64_bit-Debug/DAT_MT_EURUSD_M1_202004.csv";
             //QFileDialog::getOpenFileName(nullptr, "Market History Data");
     Market::getMarketInstance().loadHistory(filename);
+    historyLoaded();
+}
 
+void MainWindow::loadSpecificHistory()
+{
+    QString filename = QFileDialog::getOpenFileName(nullptr, "Market History Data");
+    Market::getMarketInstance().loadHistory(filename);
     historyLoaded();
 }
 

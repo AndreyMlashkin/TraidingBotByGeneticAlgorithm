@@ -18,6 +18,7 @@ public:
 
 public slots:
     void loadHistory();
+    void loadSpecificHistory();
     void loadAgents();
 
 private:
