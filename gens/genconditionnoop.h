@@ -4,11 +4,16 @@
 
 class GenConditionNoop : public GenCondition
 {
+    Q_OBJECT
+
 public:
     GenConditionNoop() {}
-    virtual bool operator() () override { return true; }
-    QString toString() const override { return "no condition"; }
+    virtual bool operator() () override;
+    QString toString() const override;
 
     void mutate() override {}
-    Mutatable* copy() const override { return new GenConditionNoop(); }
+    Mutatable* copy() const override;
+
+    QJsonObject serialize() const override;
+    void deserialize(const QJsonObject &object) override;
 };

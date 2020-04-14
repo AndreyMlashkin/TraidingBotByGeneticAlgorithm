@@ -60,4 +60,34 @@ GenAction *GenFactory::getRandomGenAction()
     return nullptr;
 }
 
+GenCondition *GenFactory::getConditionByClassName(const QString &className)
+{
+    if(className == "GenConditionNoop")
+        return new GenConditionNoop();
+    if(className == "GenConditionAsk")
+        return new GenConditionAsk();
+    if(className == "GenConditionBid")
+        return new GenConditionBid();
+    return nullptr;
+}
+
+GenAction *GenFactory::getActionByClassName(const QString &className)
+{
+    if(className == "GenActionBuy")
+        return new GenActionBuy();
+    if(className == "GenActionSell")
+        return new GenActionSell();
+    return nullptr;
+}
+
+Mutatable* GenFactory::getMutatableByClassName(const QString &className)
+{
+    Mutatable* result = nullptr;
+    result = getConditionByClassName(className);
+    if(result)
+        return result;
+    result = getActionByClassName(className);
+    return result;
+}
+
 

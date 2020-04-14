@@ -1,3 +1,6 @@
+#include <QJsonDocument>
+#include <QJsonArray>
+
 #include <QRandomGenerator>
 #include <QDebug>
 #include <QPushButton>
@@ -13,7 +16,7 @@
 #include "gens/genconditionsfactory.h"
 
 const int POPULATION_SIZE = 100;
-const int GENERATIONS_COUNT = 1000;
+const int GENERATIONS_COUNT = 100;
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -72,6 +75,7 @@ void MainWindow::historyLoaded()
         if(i % 10 == 0)
         {
             printBotsStatistic();
+            saveGeneration(m_agents);
         }
         QList<AgentBot *> newGeneration = produceNewGeneration();
         qDeleteAll(m_agents);
@@ -184,5 +188,28 @@ void MainWindow::printBotsStatistic() const
     {
         qDebug() << "bot's money: " << bot->getEurosEstimation() << bot->toString();
     }
+}
+
+QString MainWindow::generationToString(QList<AgentBot *> &bots)
+{
+    QJsonArray array;
+    for(AgentBot* bot : bots)
+    {
+        QJsonObject serializedBot = bot->serialize();
+        array.push_back(serializedBot);
+    }
+
+    QJsonDocument document(array);
+    return document.toJson();
+}
+
+void MainWindow::saveGeneration(QList<AgentBot *> &bots)
+{
+    QFile file("generation.json");
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
+           return;
+
+    QTextStream out(&file);
+    out << generationToString(bots);
 }
 

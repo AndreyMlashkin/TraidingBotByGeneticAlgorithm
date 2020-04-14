@@ -31,3 +31,17 @@ Mutatable *GenConditionAsk::copy() const
 {
     return new GenConditionAsk(m_strikeAsk);
 }
+
+QJsonObject GenConditionAsk::serialize() const
+{
+    QJsonObject result;
+    result["name"]      = metaObject()->className();
+    result["ask"] = m_strikeAsk;
+    return result;
+}
+
+void GenConditionAsk::deserialize(const QJsonObject &object)
+{
+    Q_ASSERT(object.contains("ask"));
+    m_strikeAsk = object.value("ask").toDouble();
+}

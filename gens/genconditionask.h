@@ -6,13 +6,18 @@
 
 class GenConditionAsk : public GenCondition
 {
+    Q_OBJECT
+
 public:
-    GenConditionAsk(double initialStrikeAsk);
+    GenConditionAsk(double initialStrikeAsk = 1);
     virtual bool operator() () override;
 
     void mutate() override;
     QString toString() const override;
     Mutatable* copy() const override;
+
+    QJsonObject serialize() const override;
+    void deserialize(const QJsonObject &object) override;
 
 private:
     double m_strikeAsk;

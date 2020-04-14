@@ -73,3 +73,26 @@ Mutatable *Gen::copy() const
                 dynamic_cast<GenCondition*>(m_condition->copy()),
                 dynamic_cast<GenAction*>   (m_action->copy()));
 }
+
+QJsonObject Gen::serialize() const
+{
+    QJsonObject result;
+    result["name"]      = metaObject()->className();
+    result["condition"] = m_condition->serialize();
+    result["action"]    = m_action->serialize();
+    return result;
+}
+
+void Gen::deserialize(const QJsonObject &object)
+{
+    Q_ASSERT(object.contains("condition"));
+    Q_ASSERT(object.contains("action"));
+
+    delete m_condition;
+    QString conditionType = object.value("condition").toObject().value("name").toString();
+    m_condition = GenFactory::getConditionByClassName(conditionType);
+
+    delete m_action;
+    QString actionType = object.value("action").toObject().value("name").toString();
+    m_action = GenFactory::getActionByClassName(actionType);
+}

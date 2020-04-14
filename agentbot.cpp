@@ -1,4 +1,5 @@
 #include <QRandomGenerator>
+#include <QJsonArray>
 
 #include "agentbot.h"
 #include "market.h"
@@ -95,6 +96,33 @@ Mutatable *AgentBot::copy() const
         gensCopy << dynamic_cast<Gen*>(gen->copy());
 
     return new AgentBot(gensCopy, m_euros, m_currency);
+}
+
+QJsonObject AgentBot::serialize() const
+{
+    QJsonObject result;
+    result["name"]      = metaObject()->className();
+
+    QJsonArray gens;
+    for(Gen* gen : m_gens)
+    {
+        gens.push_back(gen->serialize());
+    }
+    result["gens"] = gens;;
+    return result;
+}
+
+void AgentBot::deserialize(const QJsonObject &object)
+{
+    qDeleteAll(m_gens);
+    Q_ASSERT(object.contains("gens"));
+    QJsonArray gens = object.value("gens").toArray();
+    for(const QJsonValue& value : gens)
+    {
+        Gen* newGen = new Gen(nullptr, nullptr);
+        newGen->deserialize(value.toObject());
+        m_gens << newGen;
+    }
 }
 
 AgentBot *AgentBot::crossover(AgentBot *partner) const

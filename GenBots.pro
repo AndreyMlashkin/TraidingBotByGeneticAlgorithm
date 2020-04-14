@@ -22,6 +22,7 @@ SOURCES += \
     gens/genactionsell.cpp \
     gens/genconditionask.cpp \
     gens/genconditionbid.cpp \
+    gens/genconditionnoop.cpp \
     gens/genconditionsfactory.cpp \
     gens/mutatable.cpp \
     main.cpp \

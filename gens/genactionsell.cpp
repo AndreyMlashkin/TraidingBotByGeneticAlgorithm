@@ -28,3 +28,16 @@ Mutatable *GenActionSell::copy() const
     return new GenActionSell(m_ammount);
 }
 
+QJsonObject GenActionSell::serialize() const
+{
+    QJsonObject result;
+    result["name"]      = metaObject()->className();
+    result["ammount"] = m_ammount;
+    return result;
+}
+
+void GenActionSell::deserialize(const QJsonObject &object)
+{
+    Q_ASSERT(object.contains("ammount"));
+    m_ammount = object.value("ammount").toDouble();
+}

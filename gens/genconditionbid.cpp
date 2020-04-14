@@ -31,3 +31,17 @@ Mutatable *GenConditionBid::copy() const
 {
     return new GenConditionBid(m_strikeBid);
 }
+
+QJsonObject GenConditionBid::serialize() const
+{
+    QJsonObject result;
+    result["name"]      = metaObject()->className();
+    result["bid"] = m_strikeBid;
+    return result;
+}
+
+void GenConditionBid::deserialize(const QJsonObject &object)
+{
+    Q_ASSERT(object.contains("bid"));
+    m_strikeBid = object.value("bid").toDouble();
+}

@@ -28,6 +28,9 @@ private:
     static void resetMoney(QList<AgentBot*>& bots);
     void printBotsStatistic() const;
 
+    static QString generationToString(QList<AgentBot*>& bots);
+    static void saveGeneration(QList<AgentBot*>& bots);
+
 private:
     Ui::MainWindow *ui;
     QList<AgentBot*> m_agents;

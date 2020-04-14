@@ -7,6 +7,8 @@ class Gen;
 
 class AgentBot : public Mutatable
 {
+    Q_OBJECT
+
 public:
     AgentBot(const QList<Gen*> gens, double euros = 2000, double currency = 0);
     ~AgentBot();
@@ -22,6 +24,9 @@ public:
     void mutate() override;
     QString toString() const override;
     Mutatable* copy() const override;
+
+    QJsonObject serialize() const override;
+    void deserialize(const QJsonObject &object) override;
 
     AgentBot* crossover(AgentBot* partner) const;
 
