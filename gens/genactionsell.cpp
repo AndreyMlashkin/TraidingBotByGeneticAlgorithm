@@ -16,6 +16,8 @@ void GenActionSell::mutate()
     m_ammount = mutatecoeffNoNegative(m_ammount);
     if(m_ammount < 1)
         m_ammount = 1;
+    if(m_ammount > 2000)
+        m_ammount = 2000;
 }
 
 QString GenActionSell::toString() const

@@ -16,7 +16,7 @@
 #include "gens/genconditionsfactory.h"
 
 const int POPULATION_SIZE = 100;
-const int GENERATIONS_COUNT = 100;
+const int GENERATIONS_COUNT = 10000;
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -40,7 +40,6 @@ MainWindow::~MainWindow()
 void MainWindow::loadHistory()
 {
     QString filename = "C:/Users/malas/Documents/build-GenBots-Desktop_Qt_5_13_1_MinGW_64_bit-Debug/DAT_MT_EURUSD_M1_202004.csv";
-            //QFileDialog::getOpenFileName(nullptr, "Market History Data");
     Market::getMarketInstance().loadHistory(filename);
     historyLoaded();
 }

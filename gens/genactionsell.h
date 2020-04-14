@@ -8,7 +8,7 @@ class GenActionSell : public GenAction
     Q_OBJECT
 
 public:
-    GenActionSell(double ammount = 1);
+    GenActionSell(double ammount = 500);
     void operator() (AgentBot& parent) override;
 
     void mutate() override;
