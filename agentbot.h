@@ -23,10 +23,13 @@ public:
     QString toString() const override;
     Mutatable* copy() const override;
 
+    AgentBot* crossover(AgentBot* partner) const;
+
     void setEuros(double ammount);
     void setCurrency(double ammount);
 
     int gensCount() const;
+    const QList<Gen*> gens() const;
 
 private:
     double m_euros;
@@ -34,6 +37,5 @@ private:
 
     QList<double> m_registers;
     QList<Gen*> m_gens;
-
 };
 

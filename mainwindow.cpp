@@ -1,3 +1,4 @@
+#include <QRandomGenerator>
 #include <QDebug>
 #include <QPushButton>
 #include <QFileDialog>
@@ -119,6 +120,7 @@ QList<AgentBot *> MainWindow::produceNewGeneration() const
             --i;
         }
     }
+    Q_ASSERT(selectedOldGeneration.size() > 0);
 
     // Clone 10% best
     for(int i = 0; i < selectedOldGeneration.size() * 0.1; ++i)
@@ -134,13 +136,21 @@ QList<AgentBot *> MainWindow::produceNewGeneration() const
         newGeneration << newAgent;
     }
 
-    // Fill till 100 is reached
+
+
+    // Crossover till 100 is reached
     int i = 0;
     while(newGeneration.size() != POPULATION_SIZE)
     {
-        AgentBot* newAgent = dynamic_cast<AgentBot*>(selectedOldGeneration[i]->copy());
-        newAgent->mutate();
+        AgentBot* topAgent = dynamic_cast<AgentBot*>(selectedOldGeneration[i]->copy());
+
+        quint32 random = QRandomGenerator::global()->generate();
+        const quint32 variants = selectedOldGeneration.size();
+        random %= variants;
+        AgentBot* partner = selectedOldGeneration[random];
+        AgentBot* newAgent = topAgent->crossover(partner);
         newGeneration << newAgent;
+
         ++i;
         i %= selectedOldGeneration.size();
     }

@@ -63,14 +63,12 @@ double AgentBot::getEurosEstimation() const
 
 void AgentBot::mutate()
 {
-//    int addGenPossibility = m_gens.count() < 6? 1 : 0;
-
     int randomOperation = QRandomGenerator::global()->generate() % (m_gens.count() + 1);
     if(randomOperation == m_gens.count())
     {
         randomOperation = QRandomGenerator::global()->generate() % (m_gens.count() + 1);
-        if(gensCount() > 2)
-           m_gens.removeAt(randomOperation);
+        if(gensCount() > 2 && randomOperation != m_gens.count())
+            m_gens.removeAt(randomOperation);
         else
             m_gens << GenFactory::getRandomGen();
     }
@@ -99,6 +97,25 @@ Mutatable *AgentBot::copy() const
     return new AgentBot(gensCopy, m_euros, m_currency);
 }
 
+AgentBot *AgentBot::crossover(AgentBot *partner) const
+{
+    QList<Gen*> parentalGens = partner->gens();
+    parentalGens.append(m_gens);
+
+    while(parentalGens.size() >= 6)
+    {
+        int randomOperation = QRandomGenerator::global()->generate() % (m_gens.count());
+        parentalGens.removeAt(randomOperation);
+    }
+
+    QList<Gen*> childsGens;
+    for(Gen* gen : parentalGens)
+    {
+        childsGens << dynamic_cast<Gen*>(gen->copy());
+    }
+    return new AgentBot(childsGens);
+}
+
 void AgentBot::setEuros(double ammount)
 {
     m_euros = ammount;
@@ -112,4 +129,9 @@ void AgentBot::setCurrency(double ammount)
 int AgentBot::gensCount() const
 {
     return m_gens.count();
+}
+
+const QList<Gen *> AgentBot::gens() const
+{
+    return m_gens;
 }
