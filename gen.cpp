@@ -91,8 +91,10 @@ void Gen::deserialize(const QJsonObject &object)
     delete m_condition;
     QString conditionType = object.value("condition").toObject().value("name").toString();
     m_condition = GenFactory::getConditionByClassName(conditionType);
+    m_condition->deserialize(object.value("condition").toObject());
 
     delete m_action;
     QString actionType = object.value("action").toObject().value("name").toString();
     m_action = GenFactory::getActionByClassName(actionType);
+    m_action->deserialize(object.value("action").toObject());
 }

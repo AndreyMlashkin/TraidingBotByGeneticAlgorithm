@@ -24,6 +24,9 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
     connect(ui->m_loadHistory, &QPushButton::clicked, this, &MainWindow::loadHistory);
+    connect(ui->m_loadAgents,  &QPushButton::clicked, this, &MainWindow::loadAgents);
+
+    initialGenerateAgents();
 }
 
 MainWindow::~MainWindow()
@@ -41,10 +44,24 @@ void MainWindow::loadHistory()
     historyLoaded();
 }
 
+void MainWindow::loadAgents()
+{
+    QFile file("generation.json");
+    Q_ASSERT(file.exists());
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+           return;
+
+    qDeleteAll(m_agents);
+    m_agents = stringToGeneration(file.readAll());
+    Q_ASSERT(m_agents.size() <= POPULATION_SIZE);
+    Q_ASSERT(m_agents.size() > 0);
+
+    printBotsStatistic();
+    qDebug() << "generation loaded";
+}
+
 void MainWindow::historyLoaded()
 {
-    initialGenerateAgents();
-
     QElapsedTimer timer;
     timer.start();
 
@@ -188,6 +205,25 @@ void MainWindow::printBotsStatistic() const
     {
         qDebug() << "bot's money: " << bot->getEurosEstimation() << bot->toString();
     }
+}
+
+QList<AgentBot *> MainWindow::stringToGeneration(const QByteArray &jsonString)
+{
+    QJsonParseError error;
+    QJsonDocument jsonDocument = jsonDocument.fromJson(jsonString, &error);
+    qDebug() << "following errors occured during loading: " << error.errorString();
+
+    QJsonArray array = jsonDocument.array();
+    Q_ASSERT(array.size() > 0);
+
+    QList<AgentBot *> result;
+    for(const QJsonValue& value : array)
+    {
+        AgentBot* newBot = new AgentBot();
+        newBot->deserialize(value.toObject());
+        result << newBot;
+    }
+    return result;
 }
 
 QString MainWindow::generationToString(QList<AgentBot *> &bots)

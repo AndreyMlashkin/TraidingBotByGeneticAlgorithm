@@ -10,7 +10,7 @@ class AgentBot : public Mutatable
     Q_OBJECT
 
 public:
-    AgentBot(const QList<Gen*> gens, double euros = 2000, double currency = 0);
+    AgentBot(const QList<Gen*> gens = {}, double euros = 2000, double currency = 0);
     ~AgentBot();
 
     void buy (double ammount);

@@ -18,6 +18,7 @@ public:
 
 public slots:
     void loadHistory();
+    void loadAgents();
 
 private:
     void historyLoaded();
@@ -28,6 +29,7 @@ private:
     static void resetMoney(QList<AgentBot*>& bots);
     void printBotsStatistic() const;
 
+    static QList<AgentBot*> stringToGeneration(const QByteArray& jsonString);
     static QString generationToString(QList<AgentBot*>& bots);
     static void saveGeneration(QList<AgentBot*>& bots);
 

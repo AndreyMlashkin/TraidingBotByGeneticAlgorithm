@@ -25,9 +25,23 @@
        </widget>
       </item>
       <item>
+       <widget class="QPushButton" name="m_loadAgents">
+        <property name="text">
+         <string>Load Saved Agents</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="m_loadSpecificHistory">
+        <property name="text">
+         <string>Load Specific History Data</string>
+        </property>
+       </widget>
+      </item>
+      <item>
        <widget class="QPushButton" name="m_loadHistory">
         <property name="text">
-         <string>Load History Data</string>
+         <string>Load Default History Data</string>
         </property>
        </widget>
       </item>
@@ -41,7 +55,7 @@
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>26</height>
+     <height>22</height>
     </rect>
    </property>
   </widget>

@@ -116,10 +116,12 @@ void Market::printHistory() const
 }
 
 Market::Market() :
+    m_history(),
     m_currentTick(0)
 
 {
-
+    // in order not to crash when no market history is not yet loaded
+    m_history << CurrentTickInfo(1, 1, 1);
 }
 
 void Market::updateLimits()
