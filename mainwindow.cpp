@@ -13,7 +13,7 @@
 #include "gens/genconditionsfactory.h"
 
 const int POPULATION_SIZE = 100;
-const int GENERATIONS_COUNT = 50000;
+const int GENERATIONS_COUNT = 1000;
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -79,6 +79,7 @@ void MainWindow::historyLoaded()
     }
     //printBotsStatistic();
     qDebug() << "processing of " << GENERATIONS_COUNT << " generations took " << timer.elapsed() / 1000 << "seconds";
+    qDebug() << "one generation takes " << timer.elapsed() / GENERATIONS_COUNT  << " miliseconds";
     qDebug() << "income from generation " << incomeGeneration;
 
 }
@@ -113,11 +114,21 @@ QList<AgentBot *> MainWindow::produceNewGeneration() const
     // Elliminate NOOP agents and agents with too low performance
     for(int i = 0; i < selectedOldGeneration.size(); ++i)
     {
-        if(selectedOldGeneration[i]->getEurosEstimation() == 2000 ||
-           selectedOldGeneration[i]->getEurosEstimation() < 1)
+        double euroEstimation = selectedOldGeneration[i]->getEurosEstimation();
+
+        if(euroEstimation == 2000 ||
+           euroEstimation < 1)
         {
             selectedOldGeneration.removeAt(i);
             --i;
+            continue;
+        }
+
+        if(i != 0 && euroEstimation == selectedOldGeneration[i - 1]->getEurosEstimation())
+        {
+            selectedOldGeneration.removeAt(i);
+            --i;
+            continue;
         }
     }
     Q_ASSERT(selectedOldGeneration.size() > 0);
@@ -135,8 +146,6 @@ QList<AgentBot *> MainWindow::produceNewGeneration() const
         newAgent->mutate();
         newGeneration << newAgent;
     }
-
-
 
     // Crossover till 100 is reached
     int i = 0;
