@@ -178,14 +178,14 @@ QList<AgentBot *> MainWindow::produceNewGeneration() const
 
     // Crossover till 100 is reached
     int i = 0;
-    while(newGeneration.size() != POPULATION_SIZE)
+    while(newGeneration.size() < POPULATION_SIZE)
     {
         AgentBot* topAgent = dynamic_cast<AgentBot*>(selectedOldGeneration[i]->copy());
 
-        quint32 random = QRandomGenerator::global()->generate();
+        quint32 randomPartnerSelector = QRandomGenerator::global()->generate();
         const quint32 variants = selectedOldGeneration.size();
-        random %= variants;
-        AgentBot* partner = selectedOldGeneration[random];
+        randomPartnerSelector %= variants;
+        AgentBot* partner = selectedOldGeneration[randomPartnerSelector];
         AgentBot* newAgent = topAgent->crossover(partner);
         newGeneration << newAgent;
 
