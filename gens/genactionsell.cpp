@@ -1,9 +1,12 @@
+#include "math.h"
+
 #include "genactionsell.h"
 #include "agentbot.h"
 
 GenActionSell::GenActionSell(double ammount) :
     m_ammount(ammount)
 {
+    Q_ASSERT(std::isnan(ammount) == false);
 }
 
 void GenActionSell::operator()(AgentBot& parent)

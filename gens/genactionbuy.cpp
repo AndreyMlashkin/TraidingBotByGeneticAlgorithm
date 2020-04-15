@@ -1,3 +1,5 @@
+#include "math.h"
+
 #include <QRandomGenerator>
 
 #include "genactionbuy.h"
@@ -7,6 +9,7 @@
 GenActionBuy::GenActionBuy(double ammount) :
     m_ammount(ammount)
 {
+    Q_ASSERT(std::isnan(ammount) == false);
 }
 
 void GenActionBuy::operator()(AgentBot& parent)

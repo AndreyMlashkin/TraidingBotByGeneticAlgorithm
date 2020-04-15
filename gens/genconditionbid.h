@@ -6,6 +6,7 @@
 class GenConditionBid : public GenCondition
 {
     Q_OBJECT
+    friend class AgentBotTest;
 
 public:
     GenConditionBid(double initialStrikeBid = 1);

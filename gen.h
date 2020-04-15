@@ -13,8 +13,6 @@ public:
     Gen(GenCondition* condition, GenAction* action);
     ~Gen();
 
-    Gen& operator=(const Gen& other);
-
     bool condition();
     void action(AgentBot& parent);
 
@@ -26,6 +24,8 @@ public:
     void deserialize(const QJsonObject &object) override;
 
 private:
+    Gen& operator=(const Gen& other);
+
     GenCondition* m_condition;
     GenAction*    m_action;
 };

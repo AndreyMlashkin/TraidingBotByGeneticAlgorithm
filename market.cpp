@@ -1,3 +1,5 @@
+#include "math.h"
+
 #include <QDebug>
 #include <QDateTime>
 
@@ -153,6 +155,11 @@ void Market::updateLimits()
         if(m_cachedMinAsk > info.m_ask)
             m_cachedMinAsk = info.m_ask;
     }
+
+    Q_ASSERT(std::isnan(m_cachedMaxBid) == false);
+    Q_ASSERT(std::isnan(m_cachedMinBid) == false);
+    Q_ASSERT(std::isnan(m_cachedMaxAsk) == false);
+    Q_ASSERT(std::isnan(m_cachedMinAsk) == false);
 }
 
 QString Market::CurrentTickInfo::toString() const

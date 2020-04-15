@@ -1,10 +1,12 @@
+#include "math.h"
+
 #include "genconditionbid.h"
 #include "market.h"
 
 GenConditionBid::GenConditionBid(double initialStrikeBid)
     : m_strikeBid(initialStrikeBid)
 {
-
+    Q_ASSERT(std::isnan(initialStrikeBid) == false);
 }
 
 bool GenConditionBid::operator()()

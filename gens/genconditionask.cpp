@@ -1,10 +1,11 @@
+#include "math.h"
 #include "genconditionask.h"
 #include "market.h"
 
 GenConditionAsk::GenConditionAsk(double initialStrikeAsk)
     : m_strikeAsk(initialStrikeAsk)
 {
-
+    Q_ASSERT(std::isnan(initialStrikeAsk) == false);
 }
 
 bool GenConditionAsk::operator()()
