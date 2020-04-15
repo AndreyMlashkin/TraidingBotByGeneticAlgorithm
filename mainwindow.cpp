@@ -1,5 +1,6 @@
 #include <QJsonDocument>
 #include <QJsonArray>
+#include <QSaveFile>
 
 #include <QRandomGenerator>
 #include <QDebug>
@@ -16,7 +17,7 @@
 #include "gens/genconditionsfactory.h"
 
 const int POPULATION_SIZE = 100;
-const int GENERATIONS_COUNT = 10000;
+const int GENERATIONS_COUNT = 100;
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -60,7 +61,7 @@ void MainWindow::loadAgents()
 
     qDeleteAll(m_agents);
     m_agents = stringToGeneration(file.readAll());
-    Q_ASSERT(m_agents.size() <= POPULATION_SIZE);
+    //Q_ASSERT(m_agents.size() <= POPULATION_SIZE);
     Q_ASSERT(m_agents.size() > 0);
 
     printBotsStatistic();
@@ -248,11 +249,12 @@ QString MainWindow::generationToString(QList<AgentBot *> &bots)
 
 void MainWindow::saveGeneration(QList<AgentBot *> &bots)
 {
-    QFile file("generation.json");
+    QSaveFile file("generation.json");
     if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
            return;
 
     QTextStream out(&file);
     out << generationToString(bots);
+    file.commit();
 }
 
