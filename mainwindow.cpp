@@ -119,7 +119,7 @@ void MainWindow::historyLoaded()
         if(highestIncome > lastTickHighestIncome)
         {
             lastTickHighestIncome = highestIncome;
-            qDebug() << "new highest income is " << highestIncome << " on generation " << i;
+            qDebug() << "new highest income is " << QString::number(highestIncome, 'g', 8) << " on generation " << i;
         }
 
         if(i % 10 == 0)
@@ -135,7 +135,6 @@ void MainWindow::historyLoaded()
     qDebug() << "processing of " << GENERATIONS_COUNT << " generations took " << timer.elapsed() / 1000 << "seconds";
     qDebug() << "one generation takes " << timer.elapsed() / GENERATIONS_COUNT  << " miliseconds";
     qDebug() << "income from generation " << incomeGeneration;
-
 }
 
 void MainWindow::initialGenerateAgents()
@@ -194,8 +193,10 @@ QList<AgentBot *> MainWindow::produceNewGeneration() const
         //qDebug() << "clone num=" << newGeneration.size();
     }
 
-    // mutate 90% of rest
-    for(int i = 0; i < selectedOldGeneration.size() * 0.89; ++i)
+    int vacantPositions = POPULATION_SIZE - newGeneration.size();
+
+    // mutate 50% of rest
+    for(int i = 0; i < vacantPositions / 2 && i < selectedOldGeneration.size(); ++i)
     {
         AgentBot* newAgent = dynamic_cast<AgentBot*>(selectedOldGeneration[i]->copy());
         newAgent->mutate();

@@ -94,7 +94,7 @@ void AgentBot::mutate()
 
 QString AgentBot::toString() const
 {
-    QString answer;
+    QString answer = "gens_count = " + QString::number(gensCount()) + "; ";
     for(int i = 0; i < m_gens.size(); ++i)
     {
         answer += "Gen" + QString::number(i) + ":" + m_gens[i]->toString() + " ";
