@@ -20,6 +20,8 @@ SOURCES += \
     gen.cpp \
     gens/genactionbuy.cpp \
     gens/genactionsell.cpp \
+    gens/genactionsellpercent.cpp \
+    gens/genactionbuypercent.cpp \
     gens/genconditionask.cpp \
     gens/genconditionbid.cpp \
     gens/genconditionnoop.cpp \
@@ -35,6 +37,8 @@ HEADERS += \
     gens/genaction.h \
     gens/genactionbuy.h \
     gens/genactionsell.h \
+    gens/genactionsellpercent.h \
+    gens/genactionbuypercent.h \
     gens/gencondition.h \
     gens/genconditionask.h \
     gens/genconditionbid.h \

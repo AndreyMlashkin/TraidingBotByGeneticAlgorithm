@@ -10,6 +10,8 @@
 #include "genconditionnoop.h"
 #include "genactionbuy.h"
 #include "genactionsell.h"
+#include "genactionbuypercent.h"
+#include "genactionsellpercent.h"
 
 GenFactory::GenFactory()
 {
@@ -41,13 +43,15 @@ GenCondition *GenFactory::getRandomGenCondition()
 GenAction *GenFactory::getRandomGenAction()
 {
     quint32 random = QRandomGenerator::global()->generate();
-    const quint32 variants = 2;
+    const quint32 variants = 4;
     random %= variants;
 
     switch (random)
     {
     case 0: return new GenActionBuy();
     case 1: return new GenActionSell();
+    case 2: return new GenActionBuyPercent();
+    case 3: return new GenActionSellPercent();
     }
     Q_ASSERT(false);
     return nullptr;
@@ -70,6 +74,11 @@ GenAction *GenFactory::getActionByClassName(const QString &className)
         return new GenActionBuy();
     if(className == "GenActionSell")
         return new GenActionSell();
+    if(className == "GenActionBuyPercent")
+        return new GenActionBuyPercent();
+    if(className == "GenActionSellPercent")
+        return new GenActionSellPercent();
+    Q_ASSERT(false);
     return nullptr;
 }
 

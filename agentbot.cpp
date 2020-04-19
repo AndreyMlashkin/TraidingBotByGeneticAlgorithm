@@ -62,11 +62,21 @@ double AgentBot::getEurosEstimation() const
     return m_euros + Market::getMarketInstance().getAsk() * m_currency;
 }
 
+double AgentBot::getCurrency() const
+{
+    return m_currency;
+}
+
+double AgentBot::getCurrencyEstimation() const
+{
+    return  m_currency + Market::getMarketInstance().getBid() * m_euros;
+}
+
 void AgentBot::mutate()
 {
     int randomOperation = QRandomGenerator::global()->generate() % (m_gens.count() + 1);
     if(randomOperation == m_gens.count())
-    {
+    {        
         randomOperation = QRandomGenerator::global()->generate() % (m_gens.count() + 1);
         if(gensCount() > 2 && randomOperation != m_gens.count())
         {
@@ -128,16 +138,21 @@ void AgentBot::deserialize(const QJsonObject &object)
     }
 }
 
+void chooseRandom(QList<Gen*>& parentalGens)
+{
+    while(parentalGens.size() >= 6)
+    {
+        int randomOperation = QRandomGenerator::global()->generate() % (parentalGens.count());
+        parentalGens.removeAt(randomOperation);
+    }
+}
+
 AgentBot *AgentBot::crossover(AgentBot *partner) const
 {
     QList<Gen*> parentalGens = partner->gens();
     parentalGens.append(m_gens);
 
-    while(parentalGens.size() >= 6)
-    {
-        int randomOperation = QRandomGenerator::global()->generate() % (m_gens.count());
-        parentalGens.removeAt(randomOperation);
-    }
+    chooseRandom(parentalGens);
 
     QList<Gen*> childsGens;
     for(Gen* gen : parentalGens)

@@ -21,6 +21,9 @@ public:
     double getEuros() const;
     double getEurosEstimation() const;
 
+    double getCurrency() const;
+    double getCurrencyEstimation() const;
+
     void mutate() override;
     QString toString() const override;
     Mutatable* copy() const override;

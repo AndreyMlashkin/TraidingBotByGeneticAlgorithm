@@ -10,12 +10,12 @@ Mutatable::Mutatable()
 
 double Mutatable::mutatecoeff(double original)
 {
-    double randomKoeff = QRandomGenerator::global()->generateDouble();
 
     quint32 randomOperation = QRandomGenerator::global()->generate();
     const quint32 variants = 4;
     randomOperation %= variants;
 
+    double randomKoeff = QRandomGenerator::global()->generateDouble();
     switch (randomOperation)
     {
     case 0: original += randomKoeff; break;
