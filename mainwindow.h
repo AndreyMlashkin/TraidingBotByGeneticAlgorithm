@@ -20,8 +20,11 @@ public slots:
     void loadHistory();
     void loadSpecificHistory();
     void loadAgents();
+    void loadMultipleAgents();
 
 private:
+    void loadAgentsSave(const QString& filename);
+
     void historyLoaded();
     void initialGenerateAgents();
 

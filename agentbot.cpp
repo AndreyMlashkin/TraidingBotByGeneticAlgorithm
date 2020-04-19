@@ -69,7 +69,10 @@ void AgentBot::mutate()
     {
         randomOperation = QRandomGenerator::global()->generate() % (m_gens.count() + 1);
         if(gensCount() > 2 && randomOperation != m_gens.count())
+        {
+            delete m_gens[randomOperation];
             m_gens.removeAt(randomOperation);
+        }
         else
             m_gens << GenFactory::getRandomGen();
     }

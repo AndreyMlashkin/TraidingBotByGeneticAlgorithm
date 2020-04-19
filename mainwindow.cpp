@@ -17,7 +17,7 @@
 #include "gens/genconditionsfactory.h"
 
 const int POPULATION_SIZE = 100;
-const int GENERATIONS_COUNT = 100;
+const int GENERATIONS_COUNT = 100000;
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -27,7 +27,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->m_loadHistory,         &QPushButton::clicked, this, &MainWindow::loadHistory);
     connect(ui->m_loadSpecificHistory, &QPushButton::clicked, this, &MainWindow::loadSpecificHistory);
     connect(ui->m_loadAgents,          &QPushButton::clicked, this, &MainWindow::loadAgents);
-
+    connect(ui->m_loadMultipleAgents,  &QPushButton::clicked, this, &MainWindow::loadMultipleAgents);
 
     initialGenerateAgents();
 }
@@ -54,14 +54,30 @@ void MainWindow::loadSpecificHistory()
 
 void MainWindow::loadAgents()
 {
-    QFile file("generation.json");
+    qDeleteAll(m_agents);
+    m_agents = {};
+    loadAgentsSave("generation.json");
+    ui->label->setText(QString("agents count: %1").arg(m_agents.count()));
+}
+
+void MainWindow::loadMultipleAgents()
+{
+    QStringList filenames = QFileDialog::getOpenFileNames(nullptr, "Load Multiple Agent Saves");
+    for(const QString& filename : filenames)
+    {
+        loadAgentsSave(filename);
+    }
+
+    ui->label->setText(QString("agents count: %1").arg(m_agents.count()));
+}
+
+void MainWindow::loadAgentsSave(const QString &filename)
+{
+    QFile file(filename);
     Q_ASSERT(file.exists());
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
            return;
-
-    qDeleteAll(m_agents);
-    m_agents = stringToGeneration(file.readAll());
-    //Q_ASSERT(m_agents.size() <= POPULATION_SIZE);
+    m_agents << stringToGeneration(file.readAll());
     Q_ASSERT(m_agents.size() > 0);
 
     printBotsStatistic();
@@ -163,37 +179,41 @@ QList<AgentBot *> MainWindow::produceNewGeneration() const
     Q_ASSERT(selectedOldGeneration.size() > 0);
 
     // Clone 10% best
-    for(int i = 0; i < selectedOldGeneration.size() * 0.1; ++i)
+    for(int i = 0; i < selectedOldGeneration.size() * 0.09; ++i)
     {
         newGeneration << dynamic_cast<AgentBot*>(selectedOldGeneration[i]->copy());
+        //qDebug() << "clone num=" << newGeneration.size();
     }
 
     // mutate 90% of rest
-    for(int i = 0; i < selectedOldGeneration.size() * 0.9; ++i)
+    for(int i = 0; i < selectedOldGeneration.size() * 0.89; ++i)
     {
         AgentBot* newAgent = dynamic_cast<AgentBot*>(selectedOldGeneration[i]->copy());
         newAgent->mutate();
         newGeneration << newAgent;
+        //qDebug() << "mutate num=" << newGeneration.size();
     }
 
     // Crossover till 100 is reached
     int i = 0;
     while(newGeneration.size() < POPULATION_SIZE)
     {
-        AgentBot* topAgent = dynamic_cast<AgentBot*>(selectedOldGeneration[i]->copy());
+        const AgentBot* topAgent = dynamic_cast<AgentBot*>(selectedOldGeneration[i]);
 
         quint32 randomPartnerSelector = QRandomGenerator::global()->generate();
         const quint32 variants = selectedOldGeneration.size();
         randomPartnerSelector %= variants;
         AgentBot* partner = selectedOldGeneration[randomPartnerSelector];
         AgentBot* newAgent = topAgent->crossover(partner);
+        //qDebug() << "newborn : " << newAgent->toString();
         newGeneration << newAgent;
+        //qDebug() << "crossover num=" << newGeneration.size();
 
         ++i;
         i %= selectedOldGeneration.size();
     }
 
-    Q_ASSERT(newGeneration.size() == POPULATION_SIZE);
+    //Q_ASSERT_X(newGeneration.size() == POPULATION_SIZE, "", QString("newGeneration.size() =").arg(newGeneration.size()).toLatin1());
     resetMoney(newGeneration);
     return newGeneration;
 }
