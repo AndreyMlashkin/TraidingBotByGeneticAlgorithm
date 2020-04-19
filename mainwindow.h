@@ -37,6 +37,8 @@ private:
     static QString generationToString(QList<AgentBot*>& bots);
     static void saveGeneration(QList<AgentBot*>& bots);
 
+    double getCurrentHighestIncome() const;
+
 private:
     Ui::MainWindow *ui;
     QList<AgentBot*> m_agents;

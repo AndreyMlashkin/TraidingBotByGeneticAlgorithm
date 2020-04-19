@@ -17,7 +17,7 @@
 #include "gens/genconditionsfactory.h"
 
 const int POPULATION_SIZE = 100;
-const int GENERATIONS_COUNT = 100000;
+const int GENERATIONS_COUNT = 1000;
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -91,6 +91,7 @@ void MainWindow::historyLoaded()
 
     bool strikeOnce = true;
     int incomeGeneration = 0;
+    double lastTickHighestIncome = 0;
     for(int i = 0; i < GENERATIONS_COUNT; ++i)
     {
         Market::getMarketInstance().reset();
@@ -106,11 +107,19 @@ void MainWindow::historyLoaded()
 
             return one->gensCount() < another->gensCount();
         });
+        double highestIncome = getCurrentHighestIncome();
 
-        if(strikeOnce && m_agents.first()->getEurosEstimation() > 2000)
+        if(strikeOnce && highestIncome > 2000)
         {
             strikeOnce = false;
             incomeGeneration = i;
+        }
+
+        Q_ASSERT(highestIncome >= lastTickHighestIncome);
+        if(highestIncome > lastTickHighestIncome)
+        {
+            lastTickHighestIncome = highestIncome;
+            qDebug() << "new highest income is " << highestIncome << " on generation " << i;
         }
 
         if(i % 10 == 0)
@@ -276,5 +285,15 @@ void MainWindow::saveGeneration(QList<AgentBot *> &bots)
     QTextStream out(&file);
     out << generationToString(bots);
     file.commit();
+}
+
+double MainWindow::getCurrentHighestIncome() const
+{
+    for(const AgentBot* bot : m_agents)
+    {
+        if(bot->getEurosEstimation() != 2000)
+            return bot->getEurosEstimation();
+    }
+    return 0;
 }
 
